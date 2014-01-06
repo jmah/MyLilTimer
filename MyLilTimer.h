@@ -45,6 +45,7 @@ typedef NS_ENUM(NSInteger, MyLilTimerBehavior) {
  * \param behavior determines how time is measured.
  *
  * \param intervalSinceNow the number of seconds before the timer fires.
+ *     Like NSTimer, this is measured from now, regardless when the timer is scheduled with a run loop.
  *     The minimum value is 0.0001 for consistency with NSTimer.
  *
  * \param target the object to which to send the message specified by \p action when the timer fires.
