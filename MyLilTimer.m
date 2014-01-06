@@ -52,7 +52,20 @@ static NSTimeInterval timeIntervalSinceBoot(void)
 
 
 
-@implementation MyLilTimer
+@implementation MyLilTimer {
+    id _target;
+    SEL _action;
+}
+
+
+#pragma mark NSObject
+
+- (instancetype)init
+{
+    NSAssert(NO, @"Bad initializer, use %s", sel_getName(@selector(initWithBehavior:timeInterval:target:selector:userInfo:)));
+    return nil;
+}
+
 
 #pragma mark MyLilTimer: API
 
@@ -71,5 +84,28 @@ static NSTimeInterval timeIntervalSinceBoot(void)
             return [NSDate timeIntervalSinceReferenceDate];
     }
 }
+
+
+- (instancetype)initWithBehavior:(MyLilTimerBehavior)behavior timeInterval:(NSTimeInterval)intervalSinceNow target:(id)target selector:(SEL)action userInfo:(id)userInfo
+{
+    if (!(self = [super init])) {
+        return nil;
+    }
+
+    NSParameterAssert(isValidBehavior(behavior));
+    NSParameterAssert(target != nil);
+    NSParameterAssert(action != NULL);
+
+    // NSTimer behavior
+    intervalSinceNow = MAX(0.1e-3, intervalSinceNow);
+
+    _behavior = behavior;
+    _target = target;
+    _action = action;
+    _userInfo = userInfo;
+
+    return self;
+}
+
 
 @end

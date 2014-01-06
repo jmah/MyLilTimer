@@ -36,16 +36,39 @@ typedef NS_ENUM(NSInteger, MyLilTimerBehavior) {
  */
 + (NSTimeInterval)timeIntervalValueForBehavior:(MyLilTimerBehavior)behavior;
 
+- (instancetype)init NS_UNAVAILABLE;
+
 /**
- * Designated initializer.
+ * Creates a new timer, without scheduling it on a run loop.
+ * \em (Designated initializer.)
+ *
+ * \param behavior determines how time is measured.
+ *
+ * \param intervalSinceNow the number of seconds before the timer fires.
+ *     The minimum value is 0.0001 for consistency with NSTimer.
+ *
+ * \param target the object to which to send the message specified by \p action when the timer fires.
+ *     The timer maintains a strong reference to target until it (the timer) is invalidated.
+ *
+ * \param action the message to send to \p target when the timer fires.
+ *     This method should have the signature:
+ *     \p - (void)timerFired:(MyLilTimer *)timer
  */
-- (instancetype)initWithBehavior:(MyLilTimerBehavior)behavior timeInterval:(NSTimeInterval)intervalSinceNow target:(id)target selector:(SEL)selector userInfo:(id)userInfo;
+- (instancetype)initWithBehavior:(MyLilTimerBehavior)behavior timeInterval:(NSTimeInterval)intervalSinceNow target:(id)target selector:(SEL)action userInfo:(id)userInfo;
+
+/**
+ * Currently only timers on the main thread (using the main loop) are supported.
+ */
+- (void)scheduleOnMainRunLoopForModes:(NSSet *)modes;
 
 /**
  * Fires the timer immediately, sending the action to the target, then invalidates.
  * Does nothing if the timer has been invalidated.
  */
 - (void)fire;
+
+@property (nonatomic, readonly) MyLilTimerBehavior behavior;
+@property (nonatomic, readonly) id userInfo;
 
 /**
  * Returns the date at which the timer is currently schedule to fire.
@@ -67,7 +90,5 @@ typedef NS_ENUM(NSInteger, MyLilTimerBehavior) {
 
 - (void)invalidate;
 @property (nonatomic, readonly, getter = isValid) BOOL valid;
-
-@property (nonatomic, readonly) id userInfo;
 
 @end
