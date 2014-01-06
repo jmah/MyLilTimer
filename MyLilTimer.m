@@ -92,6 +92,7 @@ static NSTimeInterval timeIntervalSinceBoot(void)
         return nil;
     }
 
+    NSAssert([NSThread isMainThread], @"MyLilTimer does not currently support background threads.");
     NSParameterAssert(isValidBehavior(behavior));
     NSParameterAssert(target != nil);
     NSParameterAssert(action != NULL);
