@@ -72,7 +72,7 @@ typedef NS_ENUM(NSInteger, MyLilTimerBehavior) {
 @property (nonatomic, readonly) id userInfo;
 
 /**
- * Returns the date at which the timer is currently schedule to fire.
+ * Returns the date at which the timer is currently scheduled to fire.
  * This value can change depending on the timer behavior, system clock changes, and system sleep.
  */
 - (NSDate *)fireDate;
