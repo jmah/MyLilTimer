@@ -220,11 +220,9 @@ static NSString *const MyLilTimerHostCalendarChangedNotification = @"MyLilTimerH
 
     NSDate *fireDate = self.fireDate;
     if (fireDate.timeIntervalSinceNow <= 0) {
-        // Need to fire; do so in its own run loop pass so callback is run in a consistent execution environment.
-        // No need to keep track of "waiting to fire" state; multiple calls are harmless.
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self fire];
-        });
+        // Need to fire; do so in its own run loop pass so callback is run in a consistent execution environment, and run loop is in an expected mode.
+        // No need to keep track of "waiting to fire" state; multiple calls to -fire are harmless.
+        [self performSelector:@selector(fire) withObject:nil afterDelay:0 inModes:_runLoopModes.allObjects];
         return;
     }
 
