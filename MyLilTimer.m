@@ -9,6 +9,7 @@
 #import "MyLilTimer.h"
 
 #import <objc/message.h>
+#import <mach/mach.h>
 #import <sys/sysctl.h>
 
 
@@ -57,6 +58,10 @@ static void assertMainThread(void)
 }
 
 
+
+static NSString *const MyLilTimerHostCalendarChangedNotification = @"MyLilTimerHostCalendarChanged";
+
+
 @interface MyLilTimer ()
 @property (nonatomic, readwrite, getter = isValid) BOOL valid;
 @end
@@ -95,10 +100,11 @@ static void assertMainThread(void)
         case MyLilTimerBehaviorHourglass:
             return timeIntervalSinceBoot();
         case MyLilTimerBehaviorPauseOnSystemSleep:
+            // a.k.a. CACurrentMediaTime()
             // a.k.a. [NSProcessInfo processInfo].systemUptime
             // a.k.a. _CFGetSystemUptime()
             // a.k.a. mach_absolute_time() (in different units)
-            return CACurrentMediaTime();
+            return [NSProcessInfo processInfo].systemUptime;
         case MyLilTimerBehaviorObeySystemClockChanges:
             return [NSDate timeIntervalSinceReferenceDate];
     }
@@ -140,11 +146,8 @@ static void assertMainThread(void)
     NSParameterAssert(modes.count > 0);
     _runLoopModes = [modes copy];
 
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-    UIApplication *app = [UIApplication sharedApplication];
-    for (NSString *notificationName in [[self class] notificationNamesTriggeringRevalidation]) {
-        [defaultCenter addObserver:self selector:@selector(checkExpirationAndRescheduleIfNeeded:) name:notificationName object:app];
-    }
+    registerForHostCalendarChangedNotification();
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkExpirationAndRescheduleIfNeeded:) name:MyLilTimerHostCalendarChangedNotification object:nil];
 
     [self checkExpirationAndRescheduleIfNeeded:self];
 }
@@ -195,31 +198,11 @@ static void assertMainThread(void)
     [_nextCheckTimer invalidate];
     _nextCheckTimer = nil;
 
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-    UIApplication *app = [UIApplication sharedApplication];
-    for (NSString *notificationName in [[self class] notificationNamesTriggeringRevalidation]) {
-        [defaultCenter removeObserver:self name:notificationName object:app];
-    }
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MyLilTimerHostCalendarChangedNotification object:nil];
 }
 
 
 #pragma mark MyLilTimer: Private
-
-+ (NSArray *)notificationNamesTriggeringRevalidation
-{
-    return @[
-        UIApplicationSignificantTimeChangeNotification,
-        UIApplicationWillEnterForegroundNotification,
-#define USE_UNDOCUMENTED_NOTIFICATIONS 1
-        /* Without these, timers will not be up-to-date when the application is resumed while
-         * running in the background.
-         * TODO: Is there another way to know when the app is resumed? Catch SIGCONT? */
-#if USE_UNDOCUMENTED_NOTIFICATIONS
-        @"UIApplicationResumedNotification",
-        @"UIApplicationResumedEventsOnlyNotification",
-#endif
-    ];
-}
 
 /// Sender is notification, timer, or self
 - (void)checkExpirationAndRescheduleIfNeeded:(id)sender
@@ -253,6 +236,45 @@ static void assertMainThread(void)
     for (NSString *mode in _runLoopModes) {
         [runLoop addTimer:_nextCheckTimer forMode:mode];
     }
+}
+
+
+static void registerForHostCalendarChangedNotification(void)
+{
+    // Implementation inspired by <http://opensource.apple.com/source/PowerManagement/PowerManagement-420.1.20/pmconfigd/pmconfigd.c>
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CFMachPortRef cfMachPort = CFMachPortCreate(kCFAllocatorDefault, handleHostCalendarChangeMessage, NULL, NULL);
+        NSCAssert(cfMachPort, nil);
+
+        registerForHostCalendarChangeNotificationOnMachPort(CFMachPortGetPort(cfMachPort));
+
+        CFRunLoopSourceRef cfRunLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, cfMachPort, 0);
+        NSCAssert(cfRunLoopSource, nil);
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), cfRunLoopSource, kCFRunLoopDefaultMode);
+
+        CFRelease(cfRunLoopSource);
+        CFRelease(cfMachPort);
+    });
+}
+
+static void registerForHostCalendarChangeNotificationOnMachPort(mach_port_t port)
+{
+    kern_return_t result = host_request_notification(mach_host_self(), HOST_NOTIFY_CALENDAR_CHANGE, port);
+    NSCAssert(result == KERN_SUCCESS, @"host_request_notification error");
+}
+
+static void handleHostCalendarChangeMessage(CFMachPortRef port, void *msg, CFIndex size, void *info)
+{
+    const mach_msg_header_t *header = msg;
+    if (!header || header->msgh_id != HOST_CALENDAR_CHANGED_REPLYID) {
+        return;
+    }
+
+    // Register again
+    registerForHostCalendarChangeNotificationOnMachPort(header->msgh_local_port);
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:MyLilTimerHostCalendarChangedNotification object:nil];
 }
 
 
