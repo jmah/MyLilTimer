@@ -110,6 +110,13 @@ static NSString *const MyLilTimerHostCalendarChangedNotification = @"MyLilTimerH
     }
 }
 
++ (instancetype)scheduledTimerWithBehavior:(MyLilTimerBehavior)behavior timeInterval:(NSTimeInterval)intervalSinceNow target:(id)target selector:(SEL)action userInfo:(id)userInfo
+{
+    assertMainThread();
+    MyLilTimer *timer = [[self alloc] initWithBehavior:behavior timeInterval:intervalSinceNow target:target selector:action userInfo:userInfo];
+    [timer scheduleOnMainRunLoopForModes:[NSSet setWithObject:NSRunLoopCommonModes]];
+    return timer;
+}
 
 - (instancetype)initWithBehavior:(MyLilTimerBehavior)behavior timeInterval:(NSTimeInterval)intervalSinceNow target:(id)target selector:(SEL)action userInfo:(id)userInfo
 {

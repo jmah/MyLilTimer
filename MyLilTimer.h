@@ -36,6 +36,24 @@ typedef NS_ENUM(NSInteger, MyLilTimerBehavior) {
 - (instancetype)init NS_UNAVAILABLE;
 
 /**
+ * Creates a new timer and schedules it on the main run loop in NSRunLoopCommonModes.
+ *
+ * \param behavior determines how time is measured.
+ *
+ * \param intervalSinceNow the number of seconds before the timer fires.
+ *     Like NSTimer, this is measured from now, regardless when the timer is scheduled with a run loop.
+ *     The minimum value is 0.0001 for consistency with NSTimer.
+ *
+ * \param target the object to which to send the message specified by \p action when the timer fires.
+ *     The timer maintains a strong reference to target until it (the timer) is invalidated.
+ *
+ * \param action the message to send to \p target when the timer fires.
+ *     This method should have the signature:
+ *     \p - (void)timerFired:(MyLilTimer *)timer
+ */
++ (instancetype)scheduledTimerWithBehavior:(MyLilTimerBehavior)behavior timeInterval:(NSTimeInterval)intervalSinceNow target:(id)target selector:(SEL)action userInfo:(id)userInfo;
+
+/**
  * Creates a new timer, without scheduling it on a run loop.
  * \em (Designated initializer.)
  *
