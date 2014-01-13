@@ -13,10 +13,21 @@
 #import <sys/sysctl.h>
 
 
-
-static NSString *NSStringFromMyLilTimerBehavior(MyLilTimerBehavior b)
+NSString *NSStringFromMyLilTimerClock(MyLilTimerClock clock)
 {
-    switch (b) {
+    switch (clock) {
+#define CASE_RETURN(x)  case x: return @#x
+            CASE_RETURN(MyLilTimerClockRealtime);
+            CASE_RETURN(MyLilTimerClockMonotonic);
+            CASE_RETURN(MyLilTimerClockBoottime);
+#undef CASE_RETURN
+    }
+    return nil;
+}
+
+NSString *NSStringFromMyLilTimerBehavior(MyLilTimerBehavior behavior)
+{
+    switch (behavior) {
 #define CASE_RETURN(x)  case x: return @#x
             CASE_RETURN(MyLilTimerBehaviorHourglass);
             CASE_RETURN(MyLilTimerBehaviorPauseOnSystemSleep);
@@ -24,6 +35,11 @@ static NSString *NSStringFromMyLilTimerBehavior(MyLilTimerBehavior b)
 #undef CASE_RETURN
     }
     return nil;
+}
+
+static BOOL isValidClock(MyLilTimerClock b)
+{
+    return (NSStringFromMyLilTimerClock(b) != nil);
 }
 
 static BOOL isValidBehavior(MyLilTimerBehavior b)
@@ -58,8 +74,14 @@ static void assertMainThread(void)
 }
 
 
-
 static NSString *const MyLilTimerHostCalendarChangedNotification = @"MyLilTimerHostCalendarChanged";
+
+
+MyLilTimerBehavior MyLilTimerBehaviorFromClock(MyLilTimerClock clock)
+{ return (MyLilTimerBehavior)clock; }
+
+MyLilTimerClock MyLilTimerClockFromBehavior(MyLilTimerBehavior behavior)
+{ return (MyLilTimerClock)behavior; }
 
 
 @interface MyLilTimer ()
@@ -71,7 +93,7 @@ static NSString *const MyLilTimerHostCalendarChangedNotification = @"MyLilTimerH
     id _target;
     SEL _action;
 
-    NSTimeInterval _fireIntervalValue;
+    NSTimeInterval _fireClockValue;
     NSSet *_runLoopModes;
     NSTimer *_nextCheckTimer;
 }
@@ -93,20 +115,20 @@ static NSString *const MyLilTimerHostCalendarChangedNotification = @"MyLilTimerH
 
 #pragma mark MyLilTimer: API
 
-+ (NSTimeInterval)timeIntervalValueForBehavior:(MyLilTimerBehavior)behavior
++ (NSTimeInterval)nowValueForClock:(MyLilTimerClock)clock
 {
-    NSParameterAssert(isValidBehavior(behavior));
-    switch (behavior) {
-        case MyLilTimerBehaviorHourglass:
-            return timeIntervalSinceBoot();
-        case MyLilTimerBehaviorPauseOnSystemSleep:
+    NSParameterAssert(isValidClock(clock));
+    switch (clock) {
+        case MyLilTimerClockRealtime:
+            return [NSDate timeIntervalSinceReferenceDate];
+        case MyLilTimerClockMonotonic:
             // a.k.a. CACurrentMediaTime()
             // a.k.a. [NSProcessInfo processInfo].systemUptime
             // a.k.a. _CFGetSystemUptime()
             // a.k.a. mach_absolute_time() (in different units)
             return [NSProcessInfo processInfo].systemUptime;
-        case MyLilTimerBehaviorObeySystemClockChanges:
-            return [NSDate timeIntervalSinceReferenceDate];
+        case MyLilTimerClockBoottime:
+            return timeIntervalSinceBoot();
     }
 }
 
@@ -137,7 +159,7 @@ static NSString *const MyLilTimerHostCalendarChangedNotification = @"MyLilTimerH
     _action = action;
     _userInfo = userInfo;
 
-    _fireIntervalValue = [[self class] timeIntervalValueForBehavior:self.behavior] + intervalSinceNow;
+    _fireClockValue = [[self class] nowValueForClock:MyLilTimerClockFromBehavior(self.behavior)] + intervalSinceNow;
 
     self.valid = YES;
 
@@ -178,7 +200,7 @@ static NSString *const MyLilTimerHostCalendarChangedNotification = @"MyLilTimerH
 - (NSTimeInterval)timeSinceFireDate
 {
     assertMainThread();
-    return [[self class] timeIntervalValueForBehavior:self.behavior] - _fireIntervalValue;
+    return [[self class] nowValueForClock:MyLilTimerClockFromBehavior(self.behavior)] - _fireClockValue;
 }
 
 - (void)setTolerance:(NSTimeInterval)tolerance

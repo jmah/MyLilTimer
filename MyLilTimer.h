@@ -9,29 +9,44 @@
 #import <Foundation/Foundation.h>
 
 
+typedef NS_ENUM(NSInteger, MyLilTimerClock) {
+    MyLilTimerClockRealtime = 0,
+    MyLilTimerClockMonotonic,
+    MyLilTimerClockBoottime,
+};
+
+NSString *NSStringFromMyLilTimerClock(MyLilTimerClock clock);
+
+
 typedef NS_ENUM(NSInteger, MyLilTimerBehavior) {
     /// The timer fires after an interval has elapsed, regardless of system clock changes and system sleep.
-    MyLilTimerBehaviorHourglass = 0,
+    MyLilTimerBehaviorHourglass = MyLilTimerClockBoottime,
 
     /// The timer fires after the system has run for some duration; this is paused while the operating system was asleep.
     /// This is appropriate for measuring the speed of long-running operations, such as "3 of 7 items processed, 30 seconds remaining".
     ///
     /// This is the behavior of \p NSTimer and \p NSRunLoop / \p CFRunLoop.
-    MyLilTimerBehaviorPauseOnSystemSleep = 1,
+    MyLilTimerBehaviorPauseOnSystemSleep = MyLilTimerClockMonotonic,
 
     /// The timer fires when the time on the system clock passes the fire date.
     /// This is appropriate for an alarm to trigger when the clock shows a particular time.
-    MyLilTimerBehaviorObeySystemClockChanges = 2,
+    MyLilTimerBehaviorObeySystemClockChanges = MyLilTimerClockRealtime,
 };
+
+NSString *NSStringFromMyLilTimerBehavior(MyLilTimerBehavior behavior);
+
+
+MyLilTimerBehavior MyLilTimerBehaviorFromClock(MyLilTimerClock clock);
+MyLilTimerClock MyLilTimerClockFromBehavior(MyLilTimerBehavior behavior);
 
 
 @interface MyLilTimer : NSObject
 
 /**
- * Returns a time interval appropriate for measuring the given timer behavior.
- * An individual value is arbitrary; use the difference between two invocations of this method.
+ * Returns the current value of a clock.
+ * A single value is arbitrary; use the difference between two invocations of this method.
  */
-+ (NSTimeInterval)timeIntervalValueForBehavior:(MyLilTimerBehavior)behavior;
++ (NSTimeInterval)nowValueForClock:(MyLilTimerClock)clock;
 
 - (instancetype)init NS_UNAVAILABLE;
 
