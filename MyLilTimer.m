@@ -112,6 +112,14 @@ MyLilTimerClock MyLilTimerClockFromBehavior(MyLilTimerBehavior behavior)
     [self invalidate];
 }
 
+- (NSString *)description
+{
+    NSString *fireInfo = self.isValid ? @"scheduled" : @"fired";
+    NSTimeInterval timeSinceFireDate = self.timeSinceFireDate;
+    NSString *ago = (timeSinceFireDate < 0) ? @"from now" : @"ago";
+    return [NSString stringWithFormat:@"<%@ %p %@ %fs %@>", [self class], self, fireInfo, ABS(timeSinceFireDate), ago];
+}
+
 
 #pragma mark MyLilTimer: API
 
