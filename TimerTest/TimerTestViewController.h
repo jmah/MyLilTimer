@@ -11,4 +11,6 @@
 
 @interface TimerTestViewController : UIViewController
 
+- (IBAction)restartTimers:(id)sender;
+
 @end

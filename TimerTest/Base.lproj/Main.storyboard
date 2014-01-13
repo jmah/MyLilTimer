@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5037.2" systemVersion="13B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
+        <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
@@ -15,8 +16,99 @@
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CPE-E1-6e7">
+                                <rect key="frame" x="213" y="28" width="87" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Start / Reset">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="restartTimers:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="4kp-Oz-jXg"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hourglass" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OD6-lb-Zcx">
+                                <rect key="frame" x="20" y="61" width="280" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qm0-4u-wP6">
+                                <rect key="frame" x="20" y="89" width="280" height="39"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="32"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PauseOnSystemSleep (NSTimer)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LBX-4l-ISu">
+                                <rect key="frame" x="20" y="144" width="280" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ObeySystemClockChanges" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QyU-Ir-h9J">
+                                <rect key="frame" x="20" y="227" width="280" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="szI-Fg-tYJ">
+                                <rect key="frame" x="20" y="172" width="280" height="39"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="32"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MyLilTimerBehavior…" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TfL-iC-VdM">
+                                <rect key="frame" x="20" y="33" width="164" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HPO-IT-BWI">
+                                <rect key="frame" x="20" y="255" width="280" height="39"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="32"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="qm0-4u-wP6" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" symbolic="YES" id="17L-ae-rLN"/>
+                            <constraint firstAttribute="trailing" secondItem="szI-Fg-tYJ" secondAttribute="trailing" constant="20" symbolic="YES" id="1dw-Uf-M1M"/>
+                            <constraint firstItem="CPE-E1-6e7" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="20" symbolic="YES" id="AB2-wP-aRe"/>
+                            <constraint firstAttribute="trailing" secondItem="LBX-4l-ISu" secondAttribute="trailing" constant="20" symbolic="YES" id="B0o-Lb-C9d"/>
+                            <constraint firstItem="QyU-Ir-h9J" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" symbolic="YES" id="B5Y-cl-pea"/>
+                            <constraint firstItem="LBX-4l-ISu" firstAttribute="top" secondItem="qm0-4u-wP6" secondAttribute="bottom" constant="16" id="BlU-Cm-pcv"/>
+                            <constraint firstItem="qm0-4u-wP6" firstAttribute="top" secondItem="OD6-lb-Zcx" secondAttribute="bottom" constant="8" symbolic="YES" id="DOI-kH-KfC"/>
+                            <constraint firstItem="TfL-iC-VdM" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" symbolic="YES" id="HwR-0P-grN"/>
+                            <constraint firstItem="szI-Fg-tYJ" firstAttribute="top" secondItem="LBX-4l-ISu" secondAttribute="bottom" constant="8" symbolic="YES" id="J4g-J6-Wwg"/>
+                            <constraint firstItem="szI-Fg-tYJ" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" symbolic="YES" id="LAb-fA-WQE"/>
+                            <constraint firstItem="OD6-lb-Zcx" firstAttribute="top" secondItem="TfL-iC-VdM" secondAttribute="bottom" constant="8" symbolic="YES" id="WVB-Ag-8Gf"/>
+                            <constraint firstItem="OD6-lb-Zcx" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" symbolic="YES" id="ZaI-LW-xYR"/>
+                            <constraint firstAttribute="trailing" secondItem="CPE-E1-6e7" secondAttribute="trailing" constant="20" symbolic="YES" id="aFH-Ee-dwr"/>
+                            <constraint firstItem="TfL-iC-VdM" firstAttribute="baseline" secondItem="CPE-E1-6e7" secondAttribute="baseline" id="ah1-zk-88N"/>
+                            <constraint firstAttribute="trailing" secondItem="qm0-4u-wP6" secondAttribute="trailing" constant="20" symbolic="YES" id="bgD-ME-aag"/>
+                            <constraint firstItem="HPO-IT-BWI" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" symbolic="YES" id="cf0-CV-MdN"/>
+                            <constraint firstAttribute="trailing" secondItem="HPO-IT-BWI" secondAttribute="trailing" constant="20" symbolic="YES" id="fqm-dZ-hXf"/>
+                            <constraint firstAttribute="trailing" secondItem="QyU-Ir-h9J" secondAttribute="trailing" constant="20" symbolic="YES" id="kqu-dm-AFV"/>
+                            <constraint firstItem="QyU-Ir-h9J" firstAttribute="top" secondItem="szI-Fg-tYJ" secondAttribute="bottom" constant="16" id="lj9-gb-hAB"/>
+                            <constraint firstAttribute="trailing" secondItem="OD6-lb-Zcx" secondAttribute="trailing" constant="20" symbolic="YES" id="oZx-KQ-cEa"/>
+                            <constraint firstItem="HPO-IT-BWI" firstAttribute="top" secondItem="QyU-Ir-h9J" secondAttribute="bottom" constant="8" symbolic="YES" id="pWG-Gr-oEj"/>
+                            <constraint firstItem="LBX-4l-ISu" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" symbolic="YES" id="u73-nM-adO"/>
+                        </constraints>
                     </view>
+                    <size key="freeformSize" width="320" height="568"/>
+                    <connections>
+                        <outlet property="hourglassLabel" destination="qm0-4u-wP6" id="Iij-yq-npR"/>
+                        <outlet property="obeySystemClockChangesLabel" destination="HPO-IT-BWI" id="u9A-qX-Xc1"/>
+                        <outlet property="pauseOnSystemSleepLabel" destination="szI-Fg-tYJ" id="vZt-Yx-Iyr"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
