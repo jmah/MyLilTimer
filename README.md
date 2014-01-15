@@ -6,7 +6,7 @@
 
 ### MyLilTimerBehaviorHourglass (MyLilTimerClockBoottime)
 
-The timer fires after an interval has elapsed, regardless of system clock changes and system sleep. This is the behavior people often expect from `NSTimer`, and it appears to have this behavior **when running under Xcode** (or when the device is plugged in at all).
+The timer fires after an interval has elapsed, regardless of system clock changes and system sleep. This is the behavior people often expect from `NSTimer`, and it appears to have this behavior **when running under Xcode** (and when an iOS device is plugged in to power).
 
 ### MyLilTimerBehaviorPauseOnSystemSleep (MyLilTimerClockMonotonic)
 
