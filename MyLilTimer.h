@@ -24,13 +24,13 @@ typedef NS_ENUM(NSInteger, MyLilTimerBehavior) {
     MyLilTimerBehaviorHourglass = MyLilTimerClockBoottime,
 
     /// The timer fires after the system has run for some duration; this is paused while the operating system was asleep.
-    /// This is appropriate for measuring the speed of long-running operations, such as "3 of 7 items processed, 30 seconds remaining".
+    /// This behavior is appropriate for measuring the speed of long-running operations, such as "3 of 7 items processed, 30 seconds remaining".
     ///
     /// This is the behavior of \p NSTimer and \p NSRunLoop / \p CFRunLoop.
     MyLilTimerBehaviorPauseOnSystemSleep = MyLilTimerClockMonotonic,
 
     /// The timer fires when the time on the system clock passes the fire date.
-    /// This is appropriate for an alarm to trigger when the clock shows a particular time.
+    /// This behavior is appropriate for an alarm that fires when the clock shows a particular time.
     MyLilTimerBehaviorObeySystemClockChanges = MyLilTimerClockRealtime,
 };
 
