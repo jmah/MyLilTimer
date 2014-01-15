@@ -61,11 +61,14 @@ MyLilTimerClock MyLilTimerClockFromBehavior(MyLilTimerBehavior behavior);
  *     The minimum value is 0.0001 for consistency with NSTimer.
  *
  * \param target the object to which to send the message specified by \p action when the timer fires.
- *     The timer maintains a strong reference to target until it (the timer) is invalidated.
+ *     The timer maintains a strong reference to target until the timer is invalidated.
  *
  * \param action the message to send to \p target when the timer fires.
  *     This method should have the signature:
  *     \p - (void)timerFired:(MyLilTimer *)timer
+ *
+ * \param userInfo an arbitrary object associated with the timer.
+ *     The timer releases this object when it's invalidated (after the action has been sent to the target).
  */
 + (instancetype)scheduledTimerWithBehavior:(MyLilTimerBehavior)behavior timeInterval:(NSTimeInterval)intervalSinceNow target:(id)target selector:(SEL)action userInfo:(id)userInfo;
 
@@ -80,11 +83,14 @@ MyLilTimerClock MyLilTimerClockFromBehavior(MyLilTimerBehavior behavior);
  *     The minimum value is 0.0001 for consistency with NSTimer.
  *
  * \param target the object to which to send the message specified by \p action when the timer fires.
- *     The timer maintains a strong reference to target until it (the timer) is invalidated.
+ *     The timer maintains a strong reference to target until the timer is invalidated.
  *
  * \param action the message to send to \p target when the timer fires.
  *     This method should have the signature:
  *     \p - (void)timerFired:(MyLilTimer *)timer
+ *
+ * \param userInfo an arbitrary object associated with the timer.
+ *     The timer releases this object when it's invalidated (after the action has been sent to the target).
  */
 - (instancetype)initWithBehavior:(MyLilTimerBehavior)behavior timeInterval:(NSTimeInterval)intervalSinceNow target:(id)target selector:(SEL)action userInfo:(id)userInfo;
 
@@ -100,6 +106,13 @@ MyLilTimerClock MyLilTimerClockFromBehavior(MyLilTimerBehavior behavior);
 - (void)fire;
 
 @property (nonatomic, readonly) MyLilTimerBehavior behavior;
+
+/**
+ * An arbitrary object associated with the timer.
+ *
+ * \returns the argument for the \p userInfo parameter of an init method,
+ *     or nil if the timer has been invalidated.
+ */
 @property (nonatomic, readonly) id userInfo;
 
 /**
