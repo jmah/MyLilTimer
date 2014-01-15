@@ -17,7 +17,7 @@
                BlueprintIdentifier = "0BDAF7A8188340DD00574AF9"
                BuildableName = "TimerTest.app"
                BlueprintName = "TimerTest"
-               ReferencedContainer = "container:MyLilTimer.xcodeproj">
+               ReferencedContainer = "container:TimerTest.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -28,26 +28,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       buildConfiguration = "Debug">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0BDAF7CC188340DD00574AF9"
-               BuildableName = "MyLilTimerTests.xctest"
-               BlueprintName = "MyLilTimerTests"
-               ReferencedContainer = "container:MyLilTimer.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0BDAF7A8188340DD00574AF9"
-            BuildableName = "TimerTest.app"
-            BlueprintName = "TimerTest"
-            ReferencedContainer = "container:MyLilTimer.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </TestAction>
    <LaunchAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
@@ -64,7 +45,7 @@
             BlueprintIdentifier = "0BDAF7A8188340DD00574AF9"
             BuildableName = "TimerTest.app"
             BlueprintName = "TimerTest"
-            ReferencedContainer = "container:MyLilTimer.xcodeproj">
+            ReferencedContainer = "container:TimerTest.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -82,7 +63,7 @@
             BlueprintIdentifier = "0BDAF7A8188340DD00574AF9"
             BuildableName = "TimerTest.app"
             BlueprintName = "TimerTest"
-            ReferencedContainer = "container:MyLilTimer.xcodeproj">
+            ReferencedContainer = "container:TimerTest.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

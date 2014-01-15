@@ -49,11 +49,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0BDAF7A0188340DD00574AF9 = {
+		0BC52646188687DF00D08D9F /* MyLilTimer */ = {
 			isa = PBXGroup;
 			children = (
 				0BDAF7EA188377D300574AF9 /* MyLilTimer.h */,
 				0BDAF7EB188377D300574AF9 /* MyLilTimer.m */,
+			);
+			name = MyLilTimer;
+			path = ../Classes;
+			sourceTree = "<group>";
+		};
+		0BDAF7A0188340DD00574AF9 = {
+			isa = PBXGroup;
+			children = (
+				0BC52646188687DF00D08D9F /* MyLilTimer */,
 				0BDAF7B2188340DD00574AF9 /* TimerTest */,
 				0BDAF7AB188340DD00574AF9 /* Frameworks */,
 				0BDAF7AA188340DD00574AF9 /* Products */,
@@ -118,7 +127,7 @@
 			dependencies = (
 			);
 			name = TimerTest;
-			productName = MyLilTimer;
+			productName = TimerTest;
 			productReference = 0BDAF7A9188340DD00574AF9 /* TimerTest.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -128,11 +137,11 @@
 		0BDAF7A1188340DD00574AF9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				CLASSPREFIX = MyLil;
+				CLASSPREFIX = TimerTest;
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Jonathon Mah";
 			};
-			buildConfigurationList = 0BDAF7A4188340DD00574AF9 /* Build configuration list for PBXProject "MyLilTimer" */;
+			buildConfigurationList = 0BDAF7A4188340DD00574AF9 /* Build configuration list for PBXProject "TimerTest" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -289,7 +298,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0BDAF7A4188340DD00574AF9 /* Build configuration list for PBXProject "MyLilTimer" */ = {
+		0BDAF7A4188340DD00574AF9 /* Build configuration list for PBXProject "TimerTest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0BDAF7DC188340DD00574AF9 /* Debug */,

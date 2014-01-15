@@ -19,9 +19,7 @@ This behavior is appropriate for measuring the speed of long-running operations,
 The timer fires when the time on the system clock passes the fire date. This behavior is appropriate for an alarm that fires when the clock shows a particular time.
 
 
-## Use
-
-Simply add `MyLilTimer.h` and `MyLilTimer.m` to your project file.
+## Usage
 
 The most common way to set a timer is with the class convenience method:
 
@@ -34,8 +32,31 @@ The most common way to set a timer is with the class convenience method:
 The `TimerTest` iPhone / iPad app demonstrates the use of `MyLilTimer`, along with all three behaviors.
 
 
+## Requirements
+
+`MyLilTimer` uses automatic reference counting and the `dispatch_once` GCD function, which are available on Mac OS X 10.6+ and iOS 4+.
+
+If you so wanted, it would be easy to remove both these dependencies for compatibility to much earlier systems.
+
+
+## Installation
+
+Simply add `MyLilTimer.h` and `MyLilTimer.m` to your project file.
+
+Or, with [CocoaPods](http://cocoapods.org), add to your Podfile:
+
+    pod 'MyLilTimer'
+
+(Note: I have never used CocoaPods and don't otherwise endorse it,)
+
+
 ## NSTimer features not (yet) supported
 
 - Repeating timers
 - Changing the fire date
 - Use on run loops other than the main run loop (including background threads)
+
+
+## License
+
+MyLilTimer is available under the MIT license. See the LICENSE file for full text.
