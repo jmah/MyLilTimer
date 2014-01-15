@@ -49,11 +49,9 @@
     [_validTimers addObject:[MyLilTimer scheduledTimerWithBehavior:MyLilTimerBehaviorHourglass timeInterval:interval target:self selector:@selector(timerFired:) userInfo:self.hourglassLabel]];
     [_validTimers addObject:[MyLilTimer scheduledTimerWithBehavior:MyLilTimerBehaviorPauseOnSystemSleep timeInterval:interval target:self selector:@selector(timerFired:) userInfo:self.pauseOnSystemSleepLabel]];
     [_validTimers addObject:[MyLilTimer scheduledTimerWithBehavior:MyLilTimerBehaviorObeySystemClockChanges timeInterval:interval target:self selector:@selector(timerFired:) userInfo:self.obeySystemClockChangesLabel]];
-    for (MyLilTimer *timer in _validTimers) {
-        [self updateLabelForTimer:timer];
-    }
 
     _updateLabelsTimer = [NSTimer scheduledTimerWithTimeInterval:(1. / 10.) target:self selector:@selector(updateLabelsTimerFired:) userInfo:nil repeats:YES];
+    [_updateLabelsTimer fire];
 }
 
 - (void)updateLabelsTimerFired:(NSTimer *)timer
