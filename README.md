@@ -19,6 +19,21 @@ This behavior is appropriate for measuring the speed of long-running operations,
 The timer fires when the time on the system clock passes the fire date. This behavior is appropriate for an alarm that fires when the clock shows a particular time.
 
 
+## Use
+
+Simply add `MyLilTimer.h` and `MyLilTimer.m` to your project file.
+
+The most common way to set a timer is with the class convenience method:
+
+    +[MyLilTimer scheduledTimerWithBehavior:(MyLilTimerBehavior)behavior
+                               timeInterval:(NSTimeInterval)intervalSinceNow
+                                     target:(id)target
+                                   selector:(SEL)action
+                                   userInfo:(id)userInfo]
+
+The `TimerTest` iPhone / iPad app demonstrates the use of `MyLilTimer`, along with all three behaviors.
+
+
 ## NSTimer features not (yet) supported
 
 - Repeating timers
