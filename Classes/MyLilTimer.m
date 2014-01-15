@@ -43,12 +43,12 @@ NSString *NSStringFromMyLilTimerBehavior(MyLilTimerBehavior behavior)
     return nil;
 }
 
-static BOOL isValidClock(MyLilTimerClock b)
+static BOOL __unused isValidClock(MyLilTimerClock b)
 {
     return (NSStringFromMyLilTimerClock(b) != nil);
 }
 
-static BOOL isValidBehavior(MyLilTimerBehavior b)
+static BOOL __unused isValidBehavior(MyLilTimerBehavior b)
 {
     return (NSStringFromMyLilTimerBehavior(b) != nil);
 }
@@ -144,6 +144,7 @@ MyLilTimerClock MyLilTimerClockFromBehavior(MyLilTimerBehavior behavior)
         case MyLilTimerClockBoottime:
             return timeIntervalSinceBoot();
     }
+    return NAN; // assertions disabled
 }
 
 + (instancetype)scheduledTimerWithBehavior:(MyLilTimerBehavior)behavior timeInterval:(NSTimeInterval)intervalSinceNow target:(id)target selector:(SEL)action userInfo:(id)userInfo
@@ -164,6 +165,9 @@ MyLilTimerClock MyLilTimerClockFromBehavior(MyLilTimerBehavior behavior)
     NSParameterAssert(isValidBehavior(behavior));
     NSParameterAssert(target != nil);
     NSParameterAssert(action != NULL);
+    if (!isValidBehavior(behavior) || !target || !action) { // assertions diabled
+        return nil;
+    }
 
     // NSTimer behavior
     intervalSinceNow = MAX(0.1e-3, intervalSinceNow);
@@ -303,7 +307,7 @@ static void registerForHostCalendarChangedNotification(void)
 
 static void registerForHostCalendarChangeNotificationOnMachPort(mach_port_t port)
 {
-    kern_return_t result = host_request_notification(mach_host_self(), HOST_NOTIFY_CALENDAR_CHANGE, port);
+    kern_return_t __unused result = host_request_notification(mach_host_self(), HOST_NOTIFY_CALENDAR_CHANGE, port);
     NSCAssert(result == KERN_SUCCESS, @"host_request_notification error");
 }
 
