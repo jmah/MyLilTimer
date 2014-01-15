@@ -14,6 +14,11 @@
 #import <sys/sysctl.h>
 
 
+#if ! __has_feature(objc_arc)
+#error This file needs Automatic Reference Counting (ARC). Use -fobjc-arc flag (or convert project to ARC).
+#endif
+
+
 NSString *NSStringFromMyLilTimerClock(MyLilTimerClock clock)
 {
     switch (clock) {
