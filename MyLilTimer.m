@@ -270,7 +270,9 @@ MyLilTimerClock MyLilTimerClockFromBehavior(MyLilTimerBehavior behavior)
     }
 
     _nextCheckTimer = [[NSTimer alloc] initWithFireDate:fireDate interval:0 target:self selector:_cmd userInfo:nil repeats:NO];
-	_nextCheckTimer.tolerance = self.tolerance;
+    if ([_nextCheckTimer respondsToSelector:@selector(setTolerance:)]) { // OS X 10.9, iOS 7.0
+        _nextCheckTimer.tolerance = self.tolerance;
+    }
 
     NSAssert([NSRunLoop currentRunLoop] == [NSRunLoop mainRunLoop], @"MyLilTimer only supports the main run loop");
     NSRunLoop *runLoop = [NSRunLoop mainRunLoop];

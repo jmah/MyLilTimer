@@ -129,6 +129,7 @@ MyLilTimerClock MyLilTimerClockFromBehavior(MyLilTimerBehavior behavior);
 
 /**
  * A larger value allows the timer to fire later, in sync with other system activity to reduce power use.
+ * Has no effect if \p NSTimer does not support setting tolerance (prior to Mac OS X 10.9 and iOS 7.0).
  * \see -[NSTimer tolerance]
  */
 @property (nonatomic) NSTimeInterval tolerance;
