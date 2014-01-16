@@ -1,5 +1,7 @@
 # MyLilTimer
 
+## Know your clocks
+
 `MyLilTimer` is a Cocoa timer class for iOS and Mac OS X. Its only dependency is the Foundation framework. `MyLilTimer` has an interface similar to `NSTimer`, while also providing a choice of three behaviors (three different clocks).
 
 ## Behaviors
