@@ -4,9 +4,11 @@
 
 `MyLilTimer` is a Cocoa timer class for iOS and Mac OS X. Its only dependency is the Foundation framework. `MyLilTimer` has an interface similar to `NSTimer`, while also providing a choice of three behaviors (three different clocks).
 
-Read the accompanying article on dev etc: [Timers, Clocks, and Cocoa](http://devetc.org/code/2014/01/21/timers-clocks-and-cocoa.html)
+Read the accompanying article on dev etc: [Timers, Clocks, and Cocoa](http://devetc.org/code/2014/01/21/timers-clocks-and-cocoa.html).
 
 ## Behaviors
+
+The three behaviors are visualized in [this YouTube video](http://www.youtube.com/watch?v=ZRM8mq-ZSO0).
 
 ### MyLilTimerBehaviorHourglass (MyLilTimerClockBoottime)
 
