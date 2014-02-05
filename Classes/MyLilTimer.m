@@ -90,6 +90,11 @@ MyLilTimerClock MyLilTimerClockFromBehavior(MyLilTimerBehavior behavior)
 { return (MyLilTimerClock)behavior; }
 
 
+@interface MyLilTimerHostCalendarChangedNotifier : NSObject
++ (instancetype)sharedInstance;
+@end
+
+
 @interface MyLilTimer ()
 @property (nonatomic, readwrite, getter = isValid) BOOL valid;
 @end
@@ -102,6 +107,8 @@ MyLilTimerClock MyLilTimerClockFromBehavior(MyLilTimerBehavior behavior)
     NSTimeInterval _fireClockValue;
     NSSet *_runLoopModes;
     NSTimer *_nextCheckTimer;
+
+    MyLilTimerHostCalendarChangedNotifier *_notifier;
 }
 
 
@@ -193,7 +200,7 @@ MyLilTimerClock MyLilTimerClockFromBehavior(MyLilTimerBehavior behavior)
     NSParameterAssert(modes.count > 0);
     _runLoopModes = [modes copy];
 
-    registerForHostCalendarChangedNotification();
+    _notifier = [MyLilTimerHostCalendarChangedNotifier sharedInstance];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkExpirationAndRescheduleIfNeeded:) name:MyLilTimerHostCalendarChangedNotification object:nil];
 
     [self checkExpirationAndRescheduleIfNeeded:self];
@@ -246,6 +253,7 @@ MyLilTimerClock MyLilTimerClockFromBehavior(MyLilTimerBehavior behavior)
     _nextCheckTimer = nil;
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MyLilTimerHostCalendarChangedNotification object:nil];
+    _notifier = nil;
 }
 
 
@@ -285,26 +293,60 @@ MyLilTimerClock MyLilTimerClockFromBehavior(MyLilTimerBehavior behavior)
     }
 }
 
+@end
 
-static void registerForHostCalendarChangedNotification(void)
-{
-    // Implementation inspired by <http://opensource.apple.com/source/PowerManagement/PowerManagement-420.1.20/pmconfigd/pmconfigd.c>
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        CFMachPortRef cfMachPort = CFMachPortCreate(kCFAllocatorDefault, handleHostCalendarChangeMessage, NULL, NULL);
-        NSCAssert(cfMachPort, nil);
 
-        registerForHostCalendarChangeNotificationOnMachPort(CFMachPortGetPort(cfMachPort));
 
-        CFRunLoopSourceRef cfRunLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, cfMachPort, 0);
-        NSCAssert(cfRunLoopSource, nil);
-        CFRunLoopAddSource(CFRunLoopGetCurrent(), cfRunLoopSource, kCFRunLoopDefaultMode);
-
-        CFRelease(cfRunLoopSource);
-        CFRelease(cfMachPort);
-    });
+@implementation MyLilTimerHostCalendarChangedNotifier {
+    CFRunLoopSourceRef _cfRunLoopSource;
+    CFRunLoopRef _cfRunLoop;
 }
 
+#pragma mark NSObject
+
+- (instancetype)init
+{
+    if (!(self = [super init])) {
+        return nil;
+    }
+
+    _cfRunLoop = CFRunLoopGetCurrent();
+    NSAssert(_cfRunLoop, @"Need a current run loop");
+
+    // Implementation inspired by <http://opensource.apple.com/source/PowerManagement/PowerManagement-420.1.20/pmconfigd/pmconfigd.c>
+    CFMachPortRef cfMachPort = CFMachPortCreate(kCFAllocatorDefault, handleHostCalendarChangeMessage, NULL, NULL);
+    NSAssert(cfMachPort, nil);
+
+    _cfRunLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, cfMachPort, 0);
+    NSAssert(_cfRunLoopSource, nil);
+    CFRunLoopAddSource(_cfRunLoop, _cfRunLoopSource, kCFRunLoopDefaultMode);
+
+    registerForHostCalendarChangeNotificationOnMachPort(CFMachPortGetPort(cfMachPort));
+
+    return self;
+}
+
+- (void)dealloc {
+    CFRunLoopRemoveSource(_cfRunLoop, _cfRunLoopSource, kCFRunLoopDefaultMode);
+    CFRelease(_cfRunLoopSource);
+}
+
+
+#pragma mark MyLilTimerHostCalendarChangedNotifier
+
++ (instancetype)sharedInstance
+{
+    static __weak MyLilTimerHostCalendarChangedNotifier *weakSharedInstance;
+    MyLilTimerHostCalendarChangedNotifier *sharedInstance = weakSharedInstance;
+    if (!sharedInstance) {
+        sharedInstance = [[self alloc] init];
+        weakSharedInstance = sharedInstance;
+    }
+    return sharedInstance;
+}
+
+
+// These are easier implemented as C functions compared to instance methods to avoid needing a CFMachPortContext struct.
 static void registerForHostCalendarChangeNotificationOnMachPort(mach_port_t port)
 {
     kern_return_t __unused result = host_request_notification(mach_host_self(), HOST_NOTIFY_CALENDAR_CHANGE, port);
