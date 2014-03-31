@@ -65,4 +65,5 @@ Or, with [CocoaPods](http://cocoapods.org), add to your Podfile:
 
 ## License
 
-MyLilTimer is available under the MIT license. See the LICENSE file for full text.
+MyLilTimer is released into the public domain, and may be used with or without modification with no restrictions, attribution, or warranty.
+Attribution is kindly requested, but not required.
